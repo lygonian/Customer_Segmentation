@@ -15,9 +15,10 @@ import dash
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output
+import os
 
 # %%
-df_banking_raw = pd.read_csv('D:/Data Science Projekte/241021_Customer_Segementation/data/banking_train.csv', sep=';')
+df_banking_raw = pd.read_csv('data/banking_train.csv', sep=';')
 df_banking = df_banking_raw.copy()
 
 
@@ -365,5 +366,5 @@ def render_content(tab, deposit_filter):
 
 # Run the app
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    app.run(debug=True, port=10000)
 
