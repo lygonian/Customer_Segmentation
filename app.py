@@ -364,5 +364,6 @@ def render_content(tab, deposit_filter):
     return dcc.Graph(figure=fig)
 
 # Run the app
-if __name__ == '__main__':
-    app.run_server(debug=True, port=8051)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+
