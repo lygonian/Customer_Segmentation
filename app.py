@@ -1,98 +1,24 @@
 
-# %%
 import pandas as pd
 import numpy as np
-
-# Plotting
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import plotly.io as pio
 pio.renderers.default = 'vscode+png'
-
-# dash
 import dash
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output
 import os
 
-# %%
+
 df_banking_raw = pd.read_csv('data/banking_train.csv', sep=';')
 df_banking = df_banking_raw.copy()
-
-
-
 df_banking = df_banking.rename(columns={'y': 'deposit'})
 df_banking['deposit'] = df_banking['deposit'].replace({'no': int(0), 'yes': int(1)})
 df_banking['deposit'] = df_banking['deposit'].astype(int)
 
-def categorize_age(age):
-    if 18 <= age <= 30:
-        return 'young_adults'
-    elif 31 <= age <= 50:
-        return 'middle_adulthood'
-    elif 51 <= age <= 65:
-        return 'late_adulthood'
-    else:
-        return 'seniors'
-
-# %%
-# Apply the function to create the age_group column
-df_banking["age_group"] = df_banking["age"].apply(categorize_age)
-# Define the category order
-age_group_order = ['young_adults', 'middle_adulthood', 'late_adulthood', 'seniors']
-# Convert the age_group column to a categorical type with the specified order
-df_banking["age_group"] = pd.Categorical(df_banking["age_group"], categories=age_group_order, ordered=True)
-
-def categorize_job(job):
-    """
-    This function categorizes jobs into broader categories.
-
-    Parameters
-    job (str):          The job title to categorize.
-    example:            df_temp['job'] = df_temp['job'].apply(categorize_job)
-    
-    Returns
-    str:                The broader job category.
-    """
-    if job in ['management', 'admin.']:
-        return 'Management'
-    elif job in ['technician', 'blue-collar']:
-        return 'Blue-Collar'
-    elif job in ['self-employed', 'entrepreneur']:
-        return 'Self-Employment'
-    elif job in ['services', 'housemaid']:
-        return 'Service'
-    elif job == 'student':
-        return 'Student'
-    elif job == 'retired':
-        return 'Retired'
-    elif job == 'unemployed':
-        return 'Unemployed'
-    else:
-        return 'other'
-
-
-def pcut_balance(df, q=4, labels=None):
-    """
-    Perform percentile-based binning on the 'balance' column.
-
-    Parameters:
-    df (pd.DataFrame): The input DataFrame containing the 'balance' column.
-    q (int): Number of quantiles. Default is 4 (quartiles).
-    labels (list): Labels for the bins. If None, integer labels will be used.
-
-    Returns:
-    pd.DataFrame: The DataFrame with an additional 'balance_bin' column.
-    Example: df_banking = pcut_balance(df_banking, q=4, labels=['Low', 'Medium', 'High', 'Very High'])
-    """
-    df = df.copy()
-    df['balance_bin'] = pd.qcut(df['balance'], q=q, labels=labels)
-    return df
-
-
-to_binarize = ['default', 'housing', 'loan']
 def binarize_columns(df, columns):
     """
     This function takes a DataFrame and a list of column names, binarizes the specified columns,
@@ -111,23 +37,6 @@ def binarize_columns(df, columns):
         df[column] = df[column].apply(lambda x: int(1) if x == 'yes' else int(0))
     return df
 
-def combine_day_month(df, day_col='day', month_col='month', new_col='day_month'):
-    """
-    This function combines the day and month columns into a new column in the format 'day-month'.
-
-    Parameters:
-    df (pd.DataFrame): The input DataFrame.
-    day_col (str): The name of the day column. Default is 'day'.
-    month_col (str): The name of the month column. Default is 'month'.
-    new_col (str): The name of the new column to be created. Default is 'day_month'.
-
-    Returns:
-    pd.DataFrame: The DataFrame with the new combined column.
-    Example: df_banking = combine_day_month(df_banking)
-    """
-    df[new_col] = df[day_col].astype(str) + '-' + df[month_col].astype(str)
-    return df
-
 def substitute_pdays(df: pd.DataFrame) -> pd.DataFrame:
     """
     Substitute the value of 'pdays' column in the dataframe.
@@ -142,36 +51,6 @@ def substitute_pdays(df: pd.DataFrame) -> pd.DataFrame:
     """
     df['pdays'] = df['pdays'].replace(-1, 10000)
     return df
-
-def onehot_encode(df, columns):
-    """
-    This function takes a DataFrame, applies the prepare data for onehotencoding and performs
-    onehot encoding.
-
-    Parameters
-    df (pd.DataFrame):  The input DataFrame.
-    Example          :  df_temp = onehot_encode(df_banking, columns)
-    
-    Returns
-    pd.DataFrame     :  The DataFrame with one-hot encoded columns.
-    
-    """
-    df = df.reset_index(drop=True).copy()
-    
-    # Initialize the OneHotEncoder
-    encoder = OneHotEncoder(sparse_output=False)
-    encoded_age_group = encoder.fit_transform(df[columns])
-
-    # Create a DataFrame with the encoded columns
-    encoded_age_group_df = pd.DataFrame(encoded_age_group.astype(int), columns=encoder.get_feature_names_out(columns))
-    df = pd.concat([df, encoded_age_group_df], axis=1)
-    
-    # Drop the original columns if needed
-    df.drop(columns, axis=1, inplace=True)
-    return df 
-
-# %%
-df_banking.columns
 
 
 def calculate_rfm(df):
@@ -272,9 +151,9 @@ def render_content(tab, deposit_filter):
         filtered_df = df_temp[df_temp['Customer_Segments'] == tab]
 
     if deposit_filter == '1':
-        filtered_df = filtered_df[filtered_df['deposit'] == "1"]
+        filtered_df = filtered_df[filtered_df['deposit'] == 1]
     elif deposit_filter == '0':
-        filtered_df = filtered_df[filtered_df['deposit'] == "0"]
+        filtered_df = filtered_df[filtered_df['deposit'] == 0]
 
     # Create the figure with filtered data
     fig = make_subplots(
