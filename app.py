@@ -227,6 +227,9 @@ def calculate_rfm(df):
 
 # %%
 df_temp = df_banking.copy()
+df_temp = substitute_pdays(df_temp)
+df_temp = calculate_rfm(df_temp)
+df_temp = binarize_columns(df_temp, ["loan", "housing", "default"])
 df_temp.poutcome = df_temp.poutcome.replace({'unknown': 'Unknown', 'failure': 'Failure', 'success': 'Success', "other": "Unknown"})
 df_temp.month = pd.Categorical(df_temp.month, categories=['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'], ordered=True) 
 
