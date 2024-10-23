@@ -2,13 +2,19 @@
 
 ---
 
-This notebook provides a comprehensive analysis and prediction model for a bank marketing campaign dataset. The key steps involved include data preparation, feature engineering, exploratory data analysis (EDA), RFM segmentation, and machine learning model training and evaluation. The final model, a `BalancedRandomForestClassifier`, achieved a significant improvement in predicting customer subscriptions to term deposits, with a notable F2-score of 0.70. (Notebook below)
+This notebook provides a comprehensive analysis and prediction model for a bank marketing campaign dataset. The key steps include data preparation, feature engineering, exploratory data analysis (EDA), RFM segmentation, and machine learning model training and evaluation. The final model, a `BalancedRandomForestClassifier`, achieved a significant improvement in predicting customer subscriptions to term deposits, with a notable F2-score of 0.70 (increased from 0.30). (Notebook below)
 
 Here a summarizing dash app which lets you filter between Customer Segments.
 <iframe src="https://your-dash-app-url" width="100%" height="600"></iframe>  
 
 ---  
 
+# Notebook
+View notebook [here](https://nbviewer.org/github/lygonian/e_commerce_customers/blob/master/notebooks/ecommerce_customers.ipynb)  
+File saved [here](Notebooks/ecommerce_customers.ipynb)  
+The analysis includes data preparation, feature engineering, client profiling, RFM segmentation, and prediction using machine learning models. The final model achieved a significant improvement in predicting customer subscriptions to term deposits.  
+---  
+  
 # Goal
 Term deposits are a major source of income for a bank. Your money is invested for an agreed rate of interest over a fixed amount of time, or term. The bank has various outreach plans to sell term deposits to their customers such as email marketing, advertisements, telephonic marketing, and digital marketing.  
 
@@ -105,10 +111,7 @@ The data is related to direct marketing campaigns (phone calls) of a Portuguese 
 - **Actionable Strategy**: Focus on maintaining and nurturing relationships with these high-value segments through personalized offers and exclusive benefits.
 
 
-# Notebook
-View notebook [here](https://nbviewer.org/github/lygonian/e_commerce_customers/blob/master/notebooks/ecommerce_customers.ipynb)  
-File saved [here](Notebooks/ecommerce_customers.ipynb)  
-The analysis includes data preparation, feature engineering, client profiling, RFM segmentation, and prediction using machine learning models. The final model achieved a significant improvement in predicting customer subscriptions to term deposits.
+
 
 ## 1. Data Preparation and Exploratory Data Analysis (EDA)
 ### 1.1 Data Attributes
